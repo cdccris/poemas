@@ -1,1 +1,484 @@
 
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>La Háptica del Recuerdo — Voces</title>
+  <meta name="description" content="Los amigos de Cristina Del Campo recitan sus poemas. Elige un libro.">
+  <meta property="og:title"       content="La Háptica del Recuerdo — Voces">
+  <meta property="og:description" content="Los amigos de Cristina recitan sus poemas.">
+  <meta property="og:type"        content="website">
+  <meta name="theme-color"        content="#0a0a0a">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { height: 100%; }
+
+    body {
+      height: 100%;
+      min-height: 100svh;
+      background: #0a0a0a;
+      color: #f0ece4;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      overflow-x: hidden;
+    }
+
+    /* ── Cabecera ─────────────────────────────────────── */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 24px 0;
+      pointer-events: none;
+    }
+
+    .header-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(10px, 1.3vw, 13px);
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.45);
+      animation: fadeIn 1.8s ease both;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 28px;
+      background: linear-gradient(180deg, rgba(240,236,228,0.25), transparent);
+      margin-top: 10px;
+      animation: fadeIn 2s 0.3s ease both;
+    }
+
+    /* ── Split layout ────────────────────────────────── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100svh;
+    }
+
+    /* ── Panel genérico ──────────────────────────────── */
+    .panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      cursor: pointer;
+      text-decoration: none;
+      overflow: hidden;
+      transition: flex-grow 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* Línea divisoria central */
+    .split::after {
+      content: '';
+      position: fixed;
+      top: 0; bottom: 0;
+      left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(240,236,228,0.12) 20%,
+        rgba(240,236,228,0.18) 50%,
+        rgba(240,236,228,0.12) 80%,
+        transparent 100%);
+      pointer-events: none;
+      z-index: 10;
+      transition: opacity 0.5s ease;
+    }
+    body:has(.panel-vete:hover) .split::after,
+    body:has(.panel-silencio:hover) .split::after {
+      opacity: 0;
+    }
+
+    /* ── VETE PARA NO DOLER ──────────────────────────── */
+    .panel-vete {
+      background: #111110;
+      color: #f0ece4;
+    }
+
+    .panel-vete .panel-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 40% 40%, rgba(160,20,20,0.18) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 70% 70%, rgba(80,10,10,0.25) 0%, transparent 60%);
+      transition: opacity 0.6s ease;
+    }
+    .panel-vete:hover .panel-bg {
+      opacity: 1.4;
+    }
+
+    /* Grain texture overlay */
+    .panel-vete::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.055'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .panel-vete .accent-line {
+      background: linear-gradient(90deg, transparent, #c0191f, transparent);
+    }
+
+    .panel-vete .panel-number {
+      color: rgba(192,25,31,0.5);
+    }
+
+    .panel-vete .panel-cta {
+      border-color: rgba(192,25,31,0.4);
+      color: rgba(192,25,31,0.85);
+    }
+    .panel-vete:hover .panel-cta {
+      border-color: rgba(192,25,31,0.9);
+      color: #e03030;
+      background: rgba(192,25,31,0.08);
+    }
+
+    .panel-vete .hover-glow {
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(160,20,20,0.22) 0%, transparent 70%);
+    }
+
+    /* ── EL LENGUAJE DEL SILENCIO ───────────────────── */
+    .panel-silencio {
+      background: #0e0e10;
+      color: #e8e4f0;
+    }
+
+    .panel-silencio .panel-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 65% 55% at 55% 38%, rgba(100,100,160,0.14) 0%, transparent 65%),
+        radial-gradient(ellipse 45% 45% at 30% 65%, rgba(50,50,90,0.20) 0%, transparent 60%);
+      transition: opacity 0.6s ease;
+    }
+    .panel-silencio:hover .panel-bg {
+      opacity: 1.4;
+    }
+
+    .panel-silencio::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .panel-silencio .accent-line {
+      background: linear-gradient(90deg, transparent, rgba(160,155,210,0.7), transparent);
+    }
+
+    .panel-silencio .panel-number {
+      color: rgba(140,135,195,0.45);
+    }
+
+    .panel-silencio .panel-cta {
+      border-color: rgba(140,135,195,0.35);
+      color: rgba(140,135,195,0.75);
+    }
+    .panel-silencio:hover .panel-cta {
+      border-color: rgba(160,155,220,0.85);
+      color: #b0a8e0;
+      background: rgba(120,115,180,0.08);
+    }
+
+    .panel-silencio .hover-glow {
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(80,75,140,0.18) 0%, transparent 70%);
+    }
+
+    /* ── Contenido del panel ────────────────────────── */
+    .panel-inner {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      max-width: 380px;
+    }
+
+    .hover-glow {
+      position: absolute; inset: 0;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .panel:hover .hover-glow { opacity: 1; }
+
+    .panel-number {
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 1s 0.4s ease both;
+    }
+
+    .accent-line {
+      width: 60px; height: 1px;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeIn 1.2s 0.6s ease both;
+    }
+
+    .panel-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(20px, 2.8vw, 36px);
+      font-weight: 400;
+      line-height: 1.25;
+      letter-spacing: 0.05em;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 1s 0.5s ease both;
+    }
+
+    .panel-sub {
+      font-size: clamp(13px, 1.4vw, 16px);
+      font-style: italic;
+      font-weight: 300;
+      letter-spacing: 0.06em;
+      opacity: 0;
+      color: inherit;
+      filter: brightness(0.65);
+      animation: fadeIn 1.2s 0.8s ease both;
+      margin-bottom: 40px;
+    }
+
+    .panel-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 26px;
+      border: 1px solid;
+      border-radius: 40px;
+      font-family: 'Cinzel', serif;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      transition: all 0.35s ease;
+      opacity: 0;
+      animation: fadeIn 1.4s 1s ease both;
+    }
+
+    .panel-cta svg {
+      width: 12px; height: 12px;
+      stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round;
+      transition: transform 0.3s ease;
+    }
+    .panel:hover .panel-cta svg {
+      transform: translateX(4px);
+    }
+
+    /* Ilustración decorativa anatómica (Vete) */
+    .panel-illustration {
+      width: clamp(100px, 14vw, 160px);
+      height: clamp(100px, 14vw, 160px);
+      margin-bottom: 36px;
+      opacity: 0;
+      animation: fadeIn 1.6s 0.3s ease both;
+      filter: brightness(0.75);
+      transition: filter 0.4s ease, transform 0.4s ease;
+    }
+    .panel:hover .panel-illustration {
+      filter: brightness(0.95);
+      transform: scale(1.04);
+    }
+
+    /* ── Pie de página ───────────────────────────────── */
+    .footer {
+      position: fixed;
+      bottom: 24px; left: 0; right: 0;
+      z-index: 50;
+      text-align: center;
+      pointer-events: none;
+      animation: fadeIn 2s 1.4s ease both;
+      opacity: 0;
+    }
+    .footer-text {
+      font-family: 'Cinzel', serif;
+      font-size: 10px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: rgba(240,236,228,0.25);
+    }
+
+    /* ── Mobile ──────────────────────────────────────── */
+    @media (max-width: 640px) {
+      .split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+      }
+      .split::after { display: none; }
+      .panel {
+        padding: 80px 32px 60px;
+        min-height: 50svh;
+      }
+      /* Divider horizontal on mobile */
+      .panel-vete::after {
+        content: '';
+        position: absolute;
+        bottom: 0; left: 10%; right: 10%;
+        height: 1px;
+        background: linear-gradient(90deg,
+          transparent,
+          rgba(240,236,228,0.12) 30%,
+          rgba(240,236,228,0.12) 70%,
+          transparent);
+      }
+      .panel-title {
+        font-size: clamp(18px, 5vw, 26px);
+      }
+      .panel-illustration {
+        width: 90px; height: 90px;
+        margin-bottom: 24px;
+      }
+      .header { padding: 20px 16px 0; }
+      .footer { bottom: 16px; }
+    }
+
+    /* ── Animaciones ─────────────────────────────────── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <span class="header-title">La Háptica del Recuerdo &nbsp;·&nbsp; Voces</span>
+    <div class="header-divider"></div>
+  </header>
+
+  <main class="split">
+
+    <!-- ════ VETE PARA NO DOLER ════ -->
+    <a class="panel panel-vete"
+       href="https://cdccris.github.io/LaHapticaDelRecuerdo-Voces/VeteParaNoDoler/"
+       aria-label="Ir a Vete para no doler">
+
+      <div class="panel-bg"></div>
+      <div class="hover-glow"></div>
+
+      <div class="panel-inner">
+
+        <!-- Ilustración SVG: cerebro+corazón simplificado -->
+        <svg class="panel-illustration" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <g stroke="#c0191f" stroke-width="1" fill="none" opacity="0.9">
+            <!-- Corazón lado derecho -->
+            <path d="M80 120 C80 120 110 95 118 75 C126 55 115 40 100 42 C92 43 85 50 80 58"/>
+            <path d="M80 120 C80 120 50 95 42 75 C34 55 45 40 60 42 C68 43 75 50 80 58"/>
+            <!-- Aorta -->
+            <path d="M80 58 C80 52 82 44 86 38 C90 32 96 28 96 28"/>
+            <path d="M80 58 C80 52 78 44 74 38"/>
+            <!-- Línea divisoria vertical -->
+            <line x1="80" y1="38" x2="80" y2="125" stroke-dasharray="3 3" opacity="0.4"/>
+            <!-- Cerebro lado izquierdo (simplificado con curvas) -->
+            <path d="M42 75 C38 65 35 55 38 46 C41 37 50 32 58 34 C64 35 70 40 74 46"/>
+            <path d="M44 80 C36 78 30 70 32 62"/>
+            <path d="M46 90 C38 92 34 85 36 78"/>
+            <!-- Surcos cerebrales -->
+            <path d="M52 50 C54 44 58 42 62 46" stroke-width="0.8"/>
+            <path d="M46 60 C48 54 53 52 56 56" stroke-width="0.8"/>
+            <path d="M44 70 C46 64 50 62 54 66" stroke-width="0.8"/>
+            <!-- Venas corazón derecho -->
+            <path d="M100 55 C105 50 112 52 110 60" stroke-width="0.8"/>
+            <path d="M105 65 C112 62 116 68 112 74" stroke-width="0.8"/>
+          </g>
+        </svg>
+
+        <span class="panel-number">I</span>
+        <div class="accent-line"></div>
+        <h2 class="panel-title">Vete para<br>no doler</h2>
+        <p class="panel-sub">Cristina Del Campo · CDC</p>
+        <span class="panel-cta">
+          Escuchar
+          <svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- ════ EL LENGUAJE DEL SILENCIO ════ -->
+    <a class="panel panel-silencio"
+       href="https://cdccris.github.io/LaHapticaDelRecuerdo-Voces/ElLenguajeDelSilencio/"
+       aria-label="Ir a El lenguaje del silencio">
+
+      <div class="panel-bg"></div>
+      <div class="hover-glow"></div>
+
+      <div class="panel-inner">
+
+        <!-- Ilustración SVG: ojo con fluido -->
+        <svg class="panel-illustration" viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg"
+             aria-hidden="true">
+          <g stroke="#9090c8" stroke-width="1" fill="none" opacity="0.9">
+            <!-- Párpado superior -->
+            <path d="M25 78 C45 55 75 50 80 50 C85 50 115 55 135 78"/>
+            <!-- Párpado inferior -->
+            <path d="M25 78 C45 95 75 102 80 102 C85 102 115 95 135 78"/>
+            <!-- Iris -->
+            <circle cx="80" cy="78" r="20" stroke-width="1.2"/>
+            <!-- Pupila -->
+            <circle cx="80" cy="78" r="9" fill="rgba(60,58,100,0.6)" stroke-width="0.8"/>
+            <!-- Detalles iris -->
+            <circle cx="80" cy="78" r="15" stroke-dasharray="2 3" stroke-width="0.6" opacity="0.5"/>
+            <!-- Reflejo -->
+            <circle cx="85" cy="72" r="3" fill="rgba(144,144,200,0.35)" stroke="none"/>
+            <!-- Fluido / lágrima que cae -->
+            <path d="M80 102 C80 110 79 118 78 126 C77 134 76 140 78 146"
+                  stroke-width="1.2" stroke-linecap="round"/>
+            <!-- Ramificaciones del fluido -->
+            <path d="M79 118 C76 122 72 124 70 130" stroke-width="0.7" opacity="0.6"/>
+            <path d="M78 128 C75 132 73 136 74 142" stroke-width="0.6" opacity="0.5"/>
+            <path d="M79 118 C82 120 84 124 82 130" stroke-width="0.6" opacity="0.5"/>
+            <!-- Pestañas superiores -->
+            <line x1="55" y1="60" x2="52" y2="50" stroke-width="0.8" opacity="0.6"/>
+            <line x1="65" y1="54" x2="63" y2="43" stroke-width="0.8" opacity="0.6"/>
+            <line x1="75" y1="51" x2="74" y2="40" stroke-width="0.8" opacity="0.6"/>
+            <line x1="85" y1="51" x2="85" y2="40" stroke-width="0.8" opacity="0.6"/>
+            <line x1="95" y1="54" x2="97" y2="43" stroke-width="0.8" opacity="0.6"/>
+            <line x1="105" y1="60" x2="108" y2="50" stroke-width="0.8" opacity="0.6"/>
+          </g>
+        </svg>
+
+        <span class="panel-number">II</span>
+        <div class="accent-line"></div>
+        <h2 class="panel-title">El lenguaje<br>del silencio</h2>
+        <p class="panel-sub">Cristina Del Campo · CDC</p>
+        <span class="panel-cta">
+          Escuchar
+          <svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </main>
+
+  <footer class="footer">
+    <p class="footer-text">Sus amigos, en su voz</p>
+  </footer>
+
+</body>
+</html>
