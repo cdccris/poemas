@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>La Háptica del Recuerdo — Voces</title>
+  <meta name="description" content="Los amigos de Cristina Del Campo recitan sus poemas. Elige un libro.">
+  <meta name="theme-color" content="#0a0a0a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%; width: 100%;
+      overflow: hidden; /* no scroll — todo cabe en pantalla */
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+    }
+
+    /* ── Split ── */
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: 100dvh;
+      width: 100%;
+    }
+
+    /* ── Panel base ── */
+    .panel {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 40px 36px;
+      cursor: pointer;
+      text-decoration: none;
+      overflow: hidden;
+      transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .panel:hover { transform: scale(1.012); }
+
+    /* Línea divisoria central */
+    .divider {
+      position: fixed;
+      top: 0; bottom: 0; left: 50%;
+      width: 1px;
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(120,120,120,0.3) 20%,
+        rgba(120,120,120,0.3) 80%,
+        transparent 100%);
+      z-index: 20;
+      pointer-events: none;
+    }
+
+    /* ── VETE — negro, letras blancas ── */
+    .panel-vete {
+      background: #0f0f0f;
+      color: #f0ece4;
+    }
+    .panel-vete .grain {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+    .panel-vete .hover-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(80,10,10,0.45) 0%, transparent 70%);
+      opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 0;
+    }
+    .panel-vete:hover .hover-glow { opacity: 1; }
+    .panel-vete .accent { background: linear-gradient(90deg, transparent, rgba(220,220,220,0.5), transparent); }
+    .panel-vete .cta { border-color: rgba(240,236,228,0.35); color: rgba(240,236,228,0.7); }
+    .panel-vete:hover .cta { border-color: rgba(240,236,228,0.9); color: #f0ece4; background: rgba(255,255,255,0.06); }
+    .panel-vete .panel-title { color: #f0ece4; }
+    .panel-vete .panel-sub { color: rgba(240,236,228,0.45); }
+    .panel-vete .panel-num { color: rgba(240,236,228,0.25); }
+    .panel-vete .ilus { stroke: #e8e4dc; }
+
+    /* ── SILENCIO — blanco, letras negras ── */
+    .panel-silencio {
+      background: #f2efe8;
+      color: #1a1a1a;
+    }
+    .panel-silencio .grain {
+      position: absolute; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 0;
+    }
+    .panel-silencio .hover-glow {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 70% 60% at 50% 45%, rgba(160,155,200,0.2) 0%, transparent 70%);
+      opacity: 0; transition: opacity 0.5s ease; pointer-events: none; z-index: 0;
+    }
+    .panel-silencio:hover .hover-glow { opacity: 1; }
+    .panel-silencio .accent { background: linear-gradient(90deg, transparent, rgba(30,30,30,0.4), transparent); }
+    .panel-silencio .cta { border-color: rgba(26,26,26,0.3); color: rgba(26,26,26,0.6); }
+    .panel-silencio:hover .cta { border-color: rgba(26,26,26,0.8); color: #1a1a1a; background: rgba(0,0,0,0.05); }
+    .panel-silencio .panel-title { color: #1a1a1a; }
+    .panel-silencio .panel-sub { color: rgba(26,26,26,0.45); }
+    .panel-silencio .panel-num { color: rgba(26,26,26,0.2); }
+    .panel-silencio .ilus { stroke: #2a2a2a; }
+
+    /* ── Inner ── */
+    .panel-inner {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column;
+      align-items: center; text-align: center;
+      max-width: 340px; width: 100%;
+    }
+
+    .ilus-wrap {
+      width: clamp(90px, 12vw, 150px);
+      height: clamp(90px, 12vw, 150px);
+      margin-bottom: 28px;
+      transition: transform 0.4s ease;
+    }
+    .panel:hover .ilus-wrap { transform: scale(1.05); }
+    .ilus-wrap svg { width: 100%; height: 100%; }
+
+    .panel-num {
+      font-family: 'Cinzel', serif;
+      font-size: 10px; letter-spacing: 0.4em;
+      text-transform: uppercase; margin-bottom: 16px;
+      animation: fadeIn 1.8s ease both;
+    }
+
+    .accent {
+      width: 50px; height: 1px;
+      margin-bottom: 20px;
+      animation: fadeIn 2s 0.2s ease both;
+    }
+
+    .panel-title {
+      font-family: 'Cinzel', serif;
+      font-size: clamp(18px, 2.4vw, 32px);
+      font-weight: 400; line-height: 1.25;
+      letter-spacing: 0.04em; margin-bottom: 10px;
+      animation: fadeUp 1s 0.3s ease both;
+    }
+
+    .panel-sub {
+      font-size: clamp(12px, 1.2vw, 14px);
+      font-style: italic; font-weight: 300;
+      letter-spacing: 0.08em; margin-bottom: 28px;
+      animation: fadeIn 1.4s 0.5s ease both;
+    }
+
+    .cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 22px; border: 1px solid; border-radius: 40px;
+      font-family: 'Cinzel', serif; font-size: 10px;
+      font-weight: 400; letter-spacing: 0.22em; text-transform: uppercase;
+      transition: all 0.3s ease;
+      animation: fadeIn 1.6s 0.7s ease both;
+    }
+    .cta svg {
+      width: 11px; height: 11px; stroke: currentColor; fill: none;
+      stroke-width: 1.5; stroke-linecap: round;
+      transition: transform 0.3s ease;
+    }
+    .panel:hover .cta svg { transform: translateX(3px); }
+
+    /* ── Footer ── */
+    .footer {
+      position: fixed; bottom: 20px; left: 0; right: 0;
+      z-index: 50; text-align: center; pointer-events: none;
+      animation: fadeIn 2.5s 1s ease both;
+    }
+    .footer span {
+      font-family: 'Cinzel', serif; font-size: 9px;
+      letter-spacing: 0.3em; text-transform: uppercase;
+      color: rgba(140,130,120,0.4);
+    }
+
+    /* ── MOBILE: arriba/abajo, 50/50, sin scroll ── */
+    @media (max-width: 640px) {
+      .split {
+        grid-template-columns: 1fr;
+        grid-template-rows: 1fr 1fr;
+        height: 100dvh;
+      }
+      .divider {
+        top: 50%; bottom: auto; left: 0; right: 0;
+        width: 100%; height: 1px;
+        background: linear-gradient(90deg,
+          transparent, rgba(120,120,120,0.3), transparent);
+      }
+      .panel { padding: 28px 24px; }
+      .ilus-wrap { width: 70px; height: 70px; margin-bottom: 16px; }
+      .panel-title { font-size: clamp(16px, 4.5vw, 22px); }
+      .panel-sub { margin-bottom: 18px; font-size: 12px; }
+      .cta { padding: 8px 18px; font-size: 9px; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; } to { opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="divider"></div>
+
+  <main class="split">
+
+    <!-- ════ VETE PARA NO DOLER ════ -->
+    <a class="panel panel-vete"
+       href="https://cdccris.github.io/LaHapticaDelRecuerdo-Voces/VeteParaNoDoler/"
+       aria-label="Ir a Vete para no doler">
+      <div class="grain"></div>
+      <div class="hover-glow"></div>
+      <div class="panel-inner">
+        <div class="ilus-wrap">
+          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g class="ilus" fill="none" stroke-width="1.1">
+              <!-- Corazón derecho -->
+              <path d="M80 118 C80 118 108 93 116 73 C124 53 113 38 98 40 C90 41 84 48 80 57"/>
+              <path d="M80 118 C80 118 52 93 44 73 C36 53 47 38 62 40 C70 41 76 48 80 57"/>
+              <!-- Aorta -->
+              <path d="M80 57 C80 50 82 43 87 37 C91 31 97 27 97 27"/>
+              <path d="M80 57 C79 50 76 43 72 37"/>
+              <!-- Divisoria -->
+              <line x1="80" y1="37" x2="80" y2="123" stroke-dasharray="3 3" opacity="0.35"/>
+              <!-- Cerebro izquierdo -->
+              <path d="M44 73 C40 63 37 53 40 44 C43 35 52 30 60 32 C66 33 72 38 75 45"/>
+              <path d="M46 79 C38 77 32 69 34 60"/>
+              <path d="M47 89 C39 91 35 84 37 77"/>
+              <path d="M53 48 C55 42 59 40 63 44" stroke-width="0.75"/>
+              <path d="M47 58 C49 52 54 50 57 54" stroke-width="0.75"/>
+              <path d="M45 68 C47 62 51 60 55 64" stroke-width="0.75"/>
+              <!-- Venas corazón -->
+              <path d="M99 53 C104 48 111 50 109 58" stroke-width="0.75"/>
+              <path d="M104 63 C111 60 115 66 111 72" stroke-width="0.75"/>
+            </g>
+          </svg>
+        </div>
+        <span class="panel-num">I</span>
+        <div class="accent"></div>
+        <h2 class="panel-title">Vete para<br>no doler</h2>
+        <p class="panel-sub">Cristina Del Campo · CDC</p>
+        <span class="cta">
+          Escuchar
+          <svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
+        </span>
+      </div>
+    </a>
+
+    <!-- ════ EL LENGUAJE DEL SILENCIO ════ -->
+    <a class="panel panel-silencio"
+       href="https://cdccris.github.io/LaHapticaDelRecuerdo-Voces/ElLenguajeDelSilencio/"
+       aria-label="Ir a El lenguaje del silencio">
+      <div class="grain"></div>
+      <div class="hover-glow"></div>
+      <div class="panel-inner">
+        <div class="ilus-wrap">
+          <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <g class="ilus" fill="none" stroke-width="1.1">
+              <!-- Párpados -->
+              <path d="M22 76 C42 53 68 47 80 47 C92 47 118 53 138 76"/>
+              <path d="M22 76 C42 95 68 104 80 104 C92 104 118 95 138 76"/>
+              <!-- Iris -->
+              <circle cx="80" cy="76" r="21" stroke-width="1.2"/>
+              <circle cx="80" cy="76" r="16" stroke-dasharray="2 3" stroke-width="0.6" opacity="0.5"/>
+              <!-- Pupila -->
+              <circle cx="80" cy="76" r="9" fill="rgba(30,30,30,0.15)" stroke-width="0.8"/>
+              <!-- Reflejo -->
+              <circle cx="86" cy="70" r="3" fill="rgba(30,30,30,0.12)" stroke="none"/>
+              <!-- Fluido -->
+              <path d="M80 104 C80 112 79 120 78 128 C77 136 76 142 78 150" stroke-width="1.2" stroke-linecap="round"/>
+              <path d="M79 120 C76 124 72 126 70 133" stroke-width="0.7" opacity="0.6"/>
+              <path d="M78 130 C75 134 73 139 75 145" stroke-width="0.6" opacity="0.5"/>
+              <path d="M79 120 C82 122 85 126 83 133" stroke-width="0.6" opacity="0.5"/>
+              <!-- Pestañas -->
+              <line x1="52" y1="60" x2="49" y2="49" stroke-width="0.8" opacity="0.55"/>
+              <line x1="63" y1="52" x2="61" y2="41" stroke-width="0.8" opacity="0.55"/>
+              <line x1="74" y1="49" x2="73" y2="38" stroke-width="0.8" opacity="0.55"/>
+              <line x1="85" y1="49" x2="85" y2="38" stroke-width="0.8" opacity="0.55"/>
+              <line x1="96" y1="52" x2="98" y2="41" stroke-width="0.8" opacity="0.55"/>
+              <line x1="107" y1="60" x2="110" y2="49" stroke-width="0.8" opacity="0.55"/>
+            </g>
+          </svg>
+        </div>
+        <span class="panel-num">II</span>
+        <div class="accent"></div>
+        <h2 class="panel-title">El lenguaje<br>del silencio</h2>
+        <p class="panel-sub">Cristina Del Campo · CDC</p>
+        <span class="cta">
+          Escuchar
+          <svg viewBox="0 0 16 16"><line x1="2" y1="8" x2="14" y2="8"/><polyline points="9,3 14,8 9,13"/></svg>
+        </span>
+      </div>
+    </a>
+
+  </main>
+
+  <footer class="footer">
+    <span>Sus amigos, en su voz</span>
+  </footer>
+
+</body>
+</html>
