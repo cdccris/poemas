@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Todo lo que eres · Voces</title>
+  <meta name="description" content="«Todo lo que eres» recitado por Lucia Sanchez.">
+  <meta property="og:title"       content="Todo lo que eres">
+  <meta property="og:description" content="Recitado por Lucia Sanchez">
+  <meta property="og:image"       content="https://cdccris.github.io/poemas/Lucia_Sanchez/cover.png">
+  <meta property="og:type"        content="website">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:image"      content="https://cdccris.github.io/poemas/Lucia_Sanchez/cover.png">
+  <meta name="theme-color"        content="#0f0f0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: #f0ece4;
+      background: radial-gradient(900px 520px at 60% -5%, rgba(80,10,10,0.35), transparent 55%),
+                  linear-gradient(180deg, #0f0f0f, #0f0f0f);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100dvh;
+      padding: 24px 16px;
+    }
+    #read-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: #d4cbbf; z-index: 100;
+      box-shadow: 0 0 6px #d4cbbf; transition: width 0.1s linear;
+    }
+    .card {
+      width: 100%; max-width: 520px;
+      background: linear-gradient(160deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025));
+      border: 1px solid rgba(210,200,185,0.2);
+      border-radius: 24px;
+      box-shadow: 0 20px 70px rgba(0,0,0,.45);
+      padding: 28px 28px 32px;
+      backdrop-filter: blur(12px);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .back {
+      align-self: flex-start; font-size: 14px; font-style: italic;
+      color: #b0a898; text-decoration: none;
+      opacity: 0.7; margin-bottom: 22px; transition: opacity .2s;
+    }
+    .back:hover { opacity: 1; }
+    .cover {
+      width: 200px; height: 200px;
+      border-radius: 16px; object-fit: cover;
+      border: 1px solid rgba(210,200,185,0.2);
+      background: #0f0f0f;
+      display: block; margin-bottom: 22px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600;
+      font-size: clamp(22px, 5vw, 34px);
+      line-height: 1.2; text-align: center;
+      margin-bottom: 6px; letter-spacing: 0.02em;
+      color: #f0ece4;
+    }
+    .meta {
+      font-size: 15px; font-style: italic;
+      text-align: center; margin-bottom: 8px;
+      letter-spacing: 0.04em; color: #b0a898;
+      opacity: 0.85;
+    }
+    .reciter {
+      font-family: 'Cinzel', serif; font-size: 11px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #d4cbbf; opacity: 0.9;
+      text-align: center; margin-bottom: 22px;
+    }
+    audio {
+      width: 100%; outline: none;
+      accent-color: #d4cbbf; margin-bottom: 18px;
+    }
+    .actions {
+      display: flex; gap: 10px; flex-wrap: wrap;
+      justify-content: center; margin-bottom: 10px;
+    }
+    .btn {
+      appearance: none; border: none; cursor: pointer;
+      background: #d4cbbf; color: #0f0f0f;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 700; font-size: 15px;
+      padding: 11px 22px; border-radius: 12px;
+      transition: .15s transform, .15s filter;
+      text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .btn.secondary {
+      background: transparent; color: #f0ece4;
+      border: 1px solid rgba(210,200,185,0.2);
+    }
+    .hint {
+      font-size: 13px; font-style: italic;
+      text-align: center; color: #b0a898; opacity: 0.75;
+    }
+    @media (max-width: 480px) {
+      body { padding: 16px 12px; align-items: flex-start; padding-top: 32px; }
+      .card { padding: 22px 18px 28px; }
+      .cover { width: 160px; height: 160px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="read-progress"></div>
+  <main class="card">
+    <a class="back" href="https://cdccris.github.io/poemas/VeteParaNoDoler/">← Vete para no doler</a>
+    <img class="cover"
+         src="https://cdccris.github.io/poemas/Lucia_Sanchez/cover.png"
+         alt="Portada de Todo lo que eres"
+         onerror="this.style.display='none'">
+    <h1>Todo lo que eres</h1>
+    <div class="meta">de Cristina Del Campo</div>
+    <div class="reciter">Recitado por Lucia Sanchez</div>
+    <audio id="player" controls preload="metadata">
+      <source src="https://cdccris.github.io/poemas/Lucia_Sanchez/audio.m4a" type="audio/mp4">
+      <source src="https://cdccris.github.io/poemas/Lucia_Sanchez/audio.mp3" type="audio/mpeg">
+      Tu navegador no soporta el elemento de audio.
+    </audio>
+    <div class="actions">
+      <a class="btn" href="https://cdccris.github.io/poemas/Lucia_Sanchez/audio.mp3"
+         download="Lucia_Sanchez_Voces.mp3">Descargar MP3</a>
+      <button class="btn secondary" id="share">Compartir</button>
+    </div>
+    <p class="hint">En móviles pulsa ▶ para empezar.</p>
+  </main>
+  <script>
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('read-progress');
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = total > 0 ? (window.scrollY/total*100)+'%' : '100%';
+    }, {passive:true});
+    const s = document.getElementById('share');
+    if (navigator.share) {
+      s.addEventListener('click', () => navigator.share({
+        title: 'Todo lo que eres',
+        text: '«Todo lo que eres» de Cristina Del Campo, recitado por Lucia Sanchez',
+        url: location.href
+      }));
+    } else { s.style.display='none'; }
+    const p = document.getElementById('player');
+    document.addEventListener('keydown', e => {
+      if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.code==='Space'||e.key==='k'){ e.preventDefault(); p.paused?p.play():p.pause(); }
+      if (e.key==='ArrowRight') p.currentTime=Math.min(p.duration||0,p.currentTime+5);
+      if (e.key==='ArrowLeft')  p.currentTime=Math.max(0,p.currentTime-5);
+    });
+  </script>
+</body>
+</html>
