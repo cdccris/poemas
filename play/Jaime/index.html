@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Todo es efímero · Poemas</title>
+  <meta property="og:image" content="https://cdccris.github.io/poemas/Jaime/cover.png">
+  <meta name="twitter:image" content="https://cdccris.github.io/poemas/Jaime/cover.png">
+  <meta name="theme-color" content="#0f0f0f">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: #f5f0e8;
+      background:
+        radial-gradient(900px 520px at 60% -5%, rgba(100,10,10,0.3), transparent 55%),
+        linear-gradient(180deg, #0f0f0f, #0f0f0f);
+      min-height: 100svh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px 16px;
+    }
+    #read-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: #d0c8b8; z-index: 100;
+      box-shadow: 0 0 6px #d0c8b8; transition: width 0.1s linear;
+    }
+    .card {
+      width: 100%; max-width: 520px;
+      background: linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02));
+      border: 1px solid rgba(208,200,184,0.18);
+      border-radius: 24px; box-shadow: 0 20px 70px rgba(0,0,0,.45);
+      padding: 28px 28px 32px; backdrop-filter: blur(10px);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .back {
+      align-self: flex-start; font-size: 14px; font-style: italic;
+      color: #aaa098; text-decoration: none;
+      opacity: 0.75; margin-bottom: 20px; transition: opacity .2s;
+    }
+    .back:hover { opacity: 1; }
+    .cover {
+      width: 200px; height: 200px;
+      border-radius: 16px; object-fit: cover;
+      border: 1px solid rgba(208,200,184,0.18);
+      background: rgba(100,10,10,0.3); display: block; margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600;
+      font-size: clamp(22px, 5vw, 34px); line-height: 1.2;
+      text-align: center; margin-bottom: 6px; letter-spacing: 0.02em;
+    }
+    .meta { color: #aaa098; font-size: 15px; font-style: italic; text-align: center; margin-bottom: 8px; }
+    .reciter {
+      font-family: 'Cinzel', serif; font-size: 12px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #d0c8b8; opacity: 0.9; text-align: center; margin-bottom: 20px;
+    }
+    audio { width: 100%; outline: none; accent-color: #d0c8b8; margin-bottom: 16px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 8px; }
+    .btn {
+      appearance: none; border: none; cursor: pointer;
+      background: #d0c8b8; color: #0f0f0f;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600; font-size: 16px;
+      padding: 10px 22px; border-radius: 12px;
+      transition: .15s transform, .15s filter;
+      text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn.secondary { background: transparent; color: #f5f0e8; border: 1px solid rgba(208,200,184,0.18); }
+    .hint { font-size: 13px; color: #aaa098; font-style: italic; text-align: center; }
+    @media (max-width: 480px) {
+      body { padding: 16px 12px; }
+      .card { padding: 22px 18px 28px; }
+      .cover { width: 155px; height: 155px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="read-progress"></div>
+  <main class="card">
+    <a class="back" href="https://cdccris.github.io/poemas/VeteParaNoDoler/">← Vete para no doler</a>
+    <img class="cover" src="https://cdccris.github.io/poemas/Jaime/cover.png" alt="Portada" onerror="this.style.display='none'">
+    <h1>Todo es efímero</h1>
+    <div class="meta">de Cristina Del Campo</div>
+    <div class="reciter">Recitado por Jaime</div>
+    <audio id="player" controls preload="metadata">
+      <source src="https://cdccris.github.io/poemas/Jaime/audio.m4a" type="audio/mp4">
+      <source src="https://cdccris.github.io/poemas/Jaime/audio.mp3" type="audio/mpeg">
+    </audio>
+    <div class="actions">
+      <a class="btn" href="https://cdccris.github.io/poemas/Jaime/audio.mp3" download="Jaime.mp3">Descargar MP3</a>
+      <button class="btn secondary" id="share">Compartir</button>
+    </div>
+    <p class="hint">En móviles pulsa ▶ para empezar.</p>
+  </main>
+  <script>
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('read-progress');
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = total > 0 ? (window.scrollY / total * 100) + '%' : '100%';
+    }, {passive: true});
+    const shareBtn = document.getElementById('share');
+    if (navigator.share) {
+      shareBtn.addEventListener('click', () => navigator.share({
+        title: 'Todo es efímero',
+        text: 'Escucha este poema de Cristina Del Campo, recitado por Jaime',
+        url: location.href
+      }));
+    } else { shareBtn.style.display = 'none'; }
+    const player = document.getElementById('player');
+    document.addEventListener('keydown', e => {
+      if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.code === 'Space' || e.key === 'k') { e.preventDefault(); player.paused ? player.play() : player.pause(); }
+      if (e.key === 'ArrowRight') player.currentTime = Math.min(player.duration||0, player.currentTime+5);
+      if (e.key === 'ArrowLeft')  player.currentTime = Math.max(0, player.currentTime-5);
+    });
+  </script>
+</body>
+</html>
