@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Nueva Yo(rk) · Poemas</title>
+  <meta property="og:image" content="https://cdccris.github.io/poemas/Maite/cover.png">
+  <meta name="twitter:image" content="https://cdccris.github.io/poemas/Maite/cover.png">
+  <meta name="theme-color" content="#f2efe8">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: #111111;
+      background:
+        radial-gradient(900px 520px at 60% -5%, rgba(100,95,160,0.08), transparent 55%),
+        linear-gradient(180deg, #f2efe8, #f2efe8);
+      min-height: 100svh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px 16px;
+    }
+    #read-progress {
+      position: fixed; top: 0; left: 0; height: 2px; width: 0%;
+      background: #2a2420; z-index: 100;
+      box-shadow: 0 0 6px #2a2420; transition: width 0.1s linear;
+    }
+    .card {
+      width: 100%; max-width: 520px;
+      background: linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.5));
+      border: 1px solid rgba(17,17,17,0.14);
+      border-radius: 24px; box-shadow: 0 20px 70px rgba(0,0,0,.45);
+      padding: 28px 28px 32px; backdrop-filter: blur(10px);
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .back {
+      align-self: flex-start; font-size: 14px; font-style: italic;
+      color: #5a5450; text-decoration: none;
+      opacity: 0.75; margin-bottom: 20px; transition: opacity .2s;
+    }
+    .back:hover { opacity: 1; }
+    .cover {
+      width: 200px; height: 200px;
+      border-radius: 16px; object-fit: cover;
+      border: 1px solid rgba(17,17,17,0.14);
+      background: rgba(100,95,160,0.08); display: block; margin-bottom: 20px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 600;
+      font-size: clamp(22px, 5vw, 34px); line-height: 1.2;
+      text-align: center; margin-bottom: 6px; letter-spacing: 0.02em;
+    }
+    .meta {
+      color: #5a5450; font-size: 15px; font-style: italic;
+      text-align: center; margin-bottom: 8px; letter-spacing: 0.04em;
+    }
+    .reciter {
+      font-family: 'Cinzel', serif; font-size: 12px;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: #2a2420; opacity: 0.9;
+      text-align: center; margin-bottom: 20px;
+    }
+    audio { width: 100%; outline: none; accent-color: #2a2420; margin-bottom: 16px; }
+    .actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-bottom: 8px; }
+    .btn {
+      appearance: none; border: none; cursor: pointer;
+      background: #2a2420; color: #f2efe8;
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 600; font-size: 16px;
+      padding: 10px 22px; border-radius: 12px;
+      transition: .15s transform, .15s filter;
+      text-decoration: none; display: inline-flex; align-items: center;
+    }
+    .btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .btn.secondary {
+      background: transparent; color: #111111;
+      border: 1px solid rgba(17,17,17,0.14);
+    }
+    .hint { font-size: 13px; color: #5a5450; font-style: italic; text-align: center; }
+    @media (max-width: 480px) {
+      body { padding: 16px 12px; }
+      .card { padding: 22px 18px 28px; }
+      .cover { width: 155px; height: 155px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="read-progress"></div>
+  <main class="card">
+    <a class="back" href="https://cdccris.github.io/poemas/ElLenguajeDelSilencio/">← El lenguaje del silencio</a>
+    <img class="cover" src="https://cdccris.github.io/poemas/Maite/cover.png" alt="Portada" onerror="this.style.display='none'">
+    <h1>Nueva Yo(rk)</h1>
+    <div class="meta">de Cristina Del Campo</div>
+    <div class="reciter">Recitado por Maite</div>
+    <audio id="player" controls preload="metadata">
+      <source src="https://cdccris.github.io/poemas/Maite/audio.m4a" type="audio/mp4">
+      <source src="https://cdccris.github.io/poemas/Maite/audio.mp3" type="audio/mpeg">
+    </audio>
+    <div class="actions">
+      <a class="btn" href="https://cdccris.github.io/poemas/Maite/audio.mp3" download="Maite.mp3">Descargar MP3</a>
+      <button class="btn secondary" id="share">Compartir</button>
+    </div>
+    <p class="hint">En móviles pulsa ▶ para empezar.</p>
+  </main>
+  <script>
+    window.addEventListener('scroll', () => {
+      const bar = document.getElementById('read-progress');
+      const total = document.documentElement.scrollHeight - window.innerHeight;
+      bar.style.width = total > 0 ? (window.scrollY / total * 100) + '%' : '100%';
+    }, {passive: true});
+    const shareBtn = document.getElementById('share');
+    if (navigator.share) {
+      shareBtn.addEventListener('click', () => navigator.share({
+        title: 'Nueva Yo(rk)',
+        text: 'Escucha este poema de Cristina Del Campo, recitado por Maite',
+        url: location.href
+      }));
+    } else { shareBtn.style.display = 'none'; }
+    const player = document.getElementById('player');
+    document.addEventListener('keydown', e => {
+      if (['INPUT','TEXTAREA'].includes(document.activeElement.tagName)) return;
+      if (e.code === 'Space' || e.key === 'k') { e.preventDefault(); player.paused ? player.play() : player.pause(); }
+      if (e.key === 'ArrowRight') player.currentTime = Math.min(player.duration||0, player.currentTime+5);
+      if (e.key === 'ArrowLeft')  player.currentTime = Math.max(0, player.currentTime-5);
+    });
+  </script>
+</body>
+</html>
