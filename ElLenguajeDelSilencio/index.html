@@ -4,249 +4,107 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>El lenguaje del silencio</title>
-  <meta name="description" content="Poemas de El lenguaje del silencio recitados por los amigos de Cristina Del Campo.">
   <meta name="theme-color" content="#f2efe8">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg:     #f2efe8;
-      --bg2:    rgba(100,95,160,0.1);
-      --text:   #1a1a1a;
-      --muted:  #6a6460;
-      --gold:   #4a4440;
-      --border: rgba(26,26,26,0.12);
-      --num:    rgba(26,26,26,0.3);
-      --hbg:    rgba(0,0,0,0.03);
+      --bg:#f2efe8; --bg2:rgba(100,95,160,0.1);
+      --text:#111111; --muted:#5a5450;
+      --gold:#3a3430; --border:rgba(17,17,17,0.14);
+      --num:rgba(17,17,17,0.35); --hbg:rgba(0,0,0,0.04);
     }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Cormorant Garamond', Georgia, serif;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
-    body::before {
-      content: '';
-      position: fixed; inset: 0;
-      background: radial-gradient(ellipse 80% 60% at 50% 20%, var(--bg2), transparent 65%);
-      pointer-events: none; z-index: 0;
-    }
-
-    /* ── Portada ── */
-    .cover-section {
-      position: relative; min-height: 100vh;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; padding: 60px 24px 80px;
-    }
-    .back {
-      position: absolute; top: 32px; left: 32px;
-      font-size: 13px; font-style: italic;
-      color: var(--muted); text-decoration: none;
-      opacity: 0.6; transition: opacity .2s;
-      z-index: 2;
-    }
-    .back:hover { opacity: 1; }
-    .cover-inner {
-      position: relative; z-index: 1; max-width: 520px;
-    }
-    .cover-ornament {
-      display: block; font-size: 20px; letter-spacing: 0.5em;
-      color: var(--gold); opacity: 0.6; margin-bottom: 28px;
-      animation: fadeUp 1.2s ease both;
-    }
-    .cover-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(26px, 5.8vw, 54px);
-      font-weight: 400; letter-spacing: 0.05em; line-height: 1.2;
-      animation: fadeUp 1.2s 0.15s ease both;
-    }
-    .cover-divider {
-      width: 100px; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold), transparent);
-      margin: 24px auto;
-      animation: fadeIn 1.5s 0.4s ease both;
-    }
-    .cover-sub {
-      font-size: clamp(14px, 2vw, 18px); font-style: italic; font-weight: 300;
-      color: var(--muted); letter-spacing: 0.08em;
-      opacity: 0.85;
-      animation: fadeUp 1.2s 0.3s ease both;
-    }
-    .cover-author {
-      margin-top: 8px;
-      font-family: 'Cinzel', serif; font-size: 11px;
-      letter-spacing: 0.28em; text-transform: uppercase;
-      color: var(--gold); opacity: 0.90;
-      animation: fadeUp 1.2s 0.45s ease both;
-    }
-    .scroll-hint {
-      position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-      z-index: 1; display: flex; flex-direction: column; align-items: center; gap: 8px;
-      color: var(--muted); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase;
-      animation: fadeIn 2s 1.2s ease both;
-    }
-    .scroll-hint .arr {
-      width: 1px; height: 32px;
-      background: linear-gradient(180deg, var(--gold), transparent);
-      animation: pulse 2s 1.5s ease-in-out infinite;
-    }
-
-    /* ── Índice ── */
-    .index-section {
-      position: relative; z-index: 1;
-      max-width: 700px; margin: 0 auto; padding: 0 24px 100px;
-    }
-    .index-header {
-      text-align: center; margin-bottom: 52px;
-    }
-    .index-label {
-      font-family: 'Cinzel', serif; font-size: 10px;
-      letter-spacing: 0.35em; text-transform: uppercase;
-      color: var(--gold); opacity: 0.65;
-    }
-    .index-title {
-      font-size: clamp(22px, 3.2vw, 33px); font-weight: 300;
-      font-style: italic; color: var(--text); margin-top: 8px;
-    }
-
-    .poem-list {
-      list-style: none; counter-reset: poem-counter;
-    }
-    .poem-item {
-      counter-increment: poem-counter;
-      opacity: 0; transform: translateY(14px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .poem-item.visible { opacity: 1; transform: none; }
-
-    .poem-link {
-      display: grid;
-      grid-template-columns: 52px 1fr auto auto;
-      align-items: center; gap: 0 14px;
-      padding: 13px 0;
-      border-bottom: 1px solid var(--border);
-      text-decoration: none; color: var(--text);
-      position: relative; overflow: hidden;
-      transition: border-color 0.35s, padding-left 0.3s;
-    }
-    .poem-link::after {
-      content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-      width: 0;
-      background: linear-gradient(90deg, var(--hbg), transparent);
-      transition: width 0.4s; pointer-events: none;
-    }
-    .poem-link:hover::after { width: 100%; }
-    .poem-link:hover { padding-left: 4px; }
-
-    .poem-thumb {
-      width: 52px; height: 52px; border-radius: 8px;
-      object-fit: cover; border: 1px solid rgba(128,128,128,0.15);
-      background: var(--bg2); flex-shrink: 0;
-      transition: transform 0.3s, box-shadow 0.3s;
-    }
-    .poem-link:hover .poem-thumb { transform: scale(1.06); box-shadow: 0 4px 16px rgba(0,0,0,0.3); }
-
-    .poem-center { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-    .poem-num {
-      font-family: 'Cinzel', serif; font-size: 10px;
-      color: var(--num); letter-spacing: 0.12em;
-      transition: color 0.3s;
-    }
-    .poem-num::before { content: counter(poem-counter, decimal-leading-zero); }
-    .poem-name {
-      font-size: clamp(16px, 2.2vw, 22px); font-weight: 400;
-      font-style: italic; line-height: 1.25;
-      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      transition: color 0.3s;
-    }
-    .poem-reciter {
-      font-size: 13px; font-weight: 300;
-      color: var(--muted); letter-spacing: 0.04em;
-      font-style: normal; opacity: 1;
-    }
-
-    .poem-dur {
-      font-family: 'Cinzel', serif; font-size: 11px;
-      color: var(--muted); opacity: 0.6;
-      white-space: nowrap; min-width: 34px; text-align: right;
-      transition: color 0.3s;
-    }
-    .poem-arrow {
-      font-size: 13px; color: var(--gold);
-      opacity: 0; transform: translateX(-6px);
-      transition: opacity 0.3s, transform 0.3s;
-      width: 18px; text-align: center;
-    }
-    .poem-link:hover .poem-arrow { opacity: 0.9; transform: none; }
-
-    /* ── Colofón ── */
-    .colophon {
-      text-align: center; padding: 36px 24px 60px;
-      position: relative; z-index: 1;
-    }
-    .colophon-line {
-      width: 70px; height: 1px;
-      background: linear-gradient(90deg, transparent, rgba(128,128,128,0.3), transparent);
-      margin: 0 auto 20px;
-    }
-    .colophon-text {
-      font-size: 13px; color: var(--muted);
-      letter-spacing: 0.08em; font-style: italic; opacity: 0.75;
-    }
-
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: none; }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; } to { opacity: 1; }
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
-      50%       { opacity: 1;   transform: scaleY(1.1); }
-    }
-
-    @media (max-width: 500px) {
-      .poem-link { grid-template-columns: 44px 1fr auto auto; gap: 0 10px; padding: 11px 0; }
-      .poem-thumb { width: 44px; height: 44px; }
-      .poem-name { font-size: 15px; }
-      .back { top: 20px; left: 20px; }
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{background:var(--bg);color:var(--text);font-family:'Cormorant Garamond',Georgia,serif;min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 20%, var(--bg2), transparent 65%);pointer-events:none;z-index:0}
+    .cover-section{position:relative;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:60px 24px 80px}
+    .back{position:absolute;top:32px;left:32px;font-size:14px;font-style:italic;color:var(--muted);text-decoration:none;opacity:0.75;transition:opacity .2s;z-index:2}
+    .back:hover{opacity:1}
+    .cover-inner{position:relative;z-index:1;max-width:520px}
+    .cover-ornament{display:block;font-size:20px;letter-spacing:0.5em;color:var(--gold);opacity:0.75;margin-bottom:28px;animation:fadeUp 1.2s ease both}
+    .cover-title{font-family:'Cinzel',serif;font-size:clamp(26px, 5.5vw, 52px);font-weight:400;letter-spacing:0.05em;line-height:1.2;animation:fadeUp 1.2s 0.15s ease both}
+    .cover-divider{width:100px;height:1px;background:linear-gradient(90deg, transparent, var(--gold), transparent);margin:24px auto;animation:fadeIn 1.5s 0.4s ease both}
+    .cover-sub{font-size:clamp(15px, 2vw, 19px);font-style:italic;font-weight:300;color:var(--muted);letter-spacing:0.08em;animation:fadeUp 1.2s 0.3s ease both}
+    .cover-author{margin-top:8px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);opacity:0.85;animation:fadeUp 1.2s 0.45s ease both}
+    .scroll-hint{position:absolute;bottom:32px;left:50%;transform:translateX(-50%);z-index:1;display:flex;flex-direction:column;align-items:center;gap:8px;color:var(--muted);font-size:11px;letter-spacing:0.2em;text-transform:uppercase;animation:fadeIn 2s 1.2s ease both}
+    .scroll-hint .arr{width:1px;height:32px;background:linear-gradient(180deg, var(--gold), transparent);animation:pulse 2s 1.5s ease-in-out infinite}
+    .index-section{position:relative;z-index:1;max-width:700px;margin:0 auto;padding:0 24px 100px}
+    .index-header{text-align:center;margin-bottom:52px}
+    .index-label{font-family:'Cinzel',serif;font-size:11px;letter-spacing:0.35em;text-transform:uppercase;color:var(--gold);opacity:0.75}
+    .index-title{font-size:clamp(21px, 3vw, 31px);font-weight:300;font-style:italic;color:var(--text);margin-top:8px}
+    .poem-list{list-style:none;counter-reset:poem-counter}
+    .poem-item{counter-increment:poem-counter;opacity:0;transform:translateY(14px);transition:opacity 0.6s ease,transform 0.6s ease}
+    .poem-item.visible{opacity:1;transform:none}
+    .poem-link{display:grid;grid-template-columns:52px 1fr auto auto;align-items:center;gap:0 14px;padding:13px 0;border-bottom:1px solid var(--border);text-decoration:none;color:var(--text);position:relative;overflow:hidden;transition:border-color 0.35s,padding-left 0.3s}
+    .poem-link::after{content:'';position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg, var(--hbg), transparent);transition:width 0.4s;pointer-events:none}
+    .poem-link:hover::after{width:100%}
+    .poem-link:hover{padding-left:4px}
+    .poem-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;border:1px solid rgba(128,128,128,0.15);background:var(--bg2);flex-shrink:0;transition:transform 0.3s,box-shadow 0.3s}
+    .poem-link:hover .poem-thumb{transform:scale(1.06);box-shadow:0 4px 16px rgba(0,0,0,0.3)}
+    .poem-center{display:flex;flex-direction:column;gap:2px;min-width:0}
+    .poem-num{font-family:'Cinzel',serif;font-size:10px;color:var(--num);letter-spacing:0.12em;transition:color 0.3s}
+    .poem-num::before{content:counter(poem-counter, decimal-leading-zero)}
+    .poem-name{font-size:clamp(16px, 2vw, 21px);font-weight:400;font-style:italic;line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color 0.3s}
+    .poem-reciter{font-size:13px;font-weight:300;color:var(--muted);letter-spacing:0.04em;font-style:normal;opacity:0.9}
+    .poem-dur{font-family:'Cinzel',serif;font-size:11px;color:var(--muted);opacity:0.7;white-space:nowrap;min-width:34px;text-align:right}
+    .poem-arrow{font-size:13px;color:var(--gold);opacity:0;transform:translateX(-6px);transition:opacity 0.3s,transform 0.3s;width:18px;text-align:center}
+    .poem-link:hover .poem-arrow{opacity:0.9;transform:none}
+    .colophon{text-align:center;padding:36px 24px 60px;position:relative;z-index:1}
+    .colophon-line{width:70px;height:1px;background:linear-gradient(90deg, transparent, rgba(128,128,128,0.3), transparent);margin:0 auto 20px}
+    .colophon-text{font-size:13px;color:var(--muted);letter-spacing:0.08em;font-style:italic}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+    @keyframes pulse{0%,100%{opacity:0.3;transform:scaleY(0.8)}50%{opacity:1;transform:scaleY(1.1)}}
+    @media(max-width:500px){.poem-link{grid-template-columns:44px 1fr auto auto;gap:0 10px;padding:11px 0}.poem-thumb{width:44px;height:44px}.poem-name{font-size:15px}.back{top:20px;left:20px}}
   </style>
 </head>
 <body>
-
   <section class="cover-section">
     <a class="back" href="https://cdccris.github.io/poemas/">← Libros</a>
     <div class="cover-inner">
       <span class="cover-ornament">✦ &nbsp; ✦ &nbsp; ✦</span>
       <h1 class="cover-title">El lenguaje del silencio</h1>
       <div class="cover-divider"></div>
-      <p class="cover-sub">Poemas recitados</p>
+      <p class="cover-sub">Poemas recitados por sus amigos</p>
       <p class="cover-author">Cristina Del Campo · CDC</p>
     </div>
-    <div class="scroll-hint" aria-hidden="true">
-      <span>Poemas</span>
-      <div class="arr"></div>
-    </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Poemas</span><div class="arr"></div></div>
   </section>
-
   <section class="index-section">
     <div class="index-header">
-
+      <p class="index-label">Sus amigos, en su voz</p>
       <h2 class="index-title">Elige un poema para escucharlo</h2>
     </div>
     <ol class="poem-list">
       <li class="poem-item">
+        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Carmen/" aria-label="La oveja gris — Carmen">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Carmen/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div class="poem-center">
+            <span class="poem-num"></span>
+            <span class="poem-name">La oveja gris</span>
+            <span class="poem-reciter">Carmen</span>
+          </div>
+          <span class="poem-dur">—</span>
+          <span class="poem-arrow">→</span>
+        </a>
+      </li>
+      <li class="poem-item">
+        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Maite/" aria-label="Nueva Yo(rk) — Maite">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Maite/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div class="poem-center">
+            <span class="poem-num"></span>
+            <span class="poem-name">Nueva Yo(rk)</span>
+            <span class="poem-reciter">Maite</span>
+          </div>
+          <span class="poem-dur">—</span>
+          <span class="poem-arrow">→</span>
+        </a>
+      </li>
+      <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Pilar_Marin/" aria-label="Vera-no — Pilar Marin">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Pilar_Marin/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Pilar_Marin/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Vera-no</span>
@@ -258,10 +116,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Ziortza/" aria-label="De verdad — Ziortza">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Ziortza/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Ziortza/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">De verdad</span>
@@ -273,10 +128,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Lola/" aria-label="Co(razones) — Lola">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Lola/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Lola/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Co(razones)</span>
@@ -288,10 +140,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Anna/" aria-label="A(MAR) — Anna">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Anna/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Anna/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">A(MAR)</span>
@@ -302,11 +151,20 @@
         </a>
       </li>
       <li class="poem-item">
+        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Ana/" aria-label="En la próxima salida — Ana">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Ana/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div class="poem-center">
+            <span class="poem-num"></span>
+            <span class="poem-name">En la próxima salida</span>
+            <span class="poem-reciter">Ana</span>
+          </div>
+          <span class="poem-dur">—</span>
+          <span class="poem-arrow">→</span>
+        </a>
+      </li>
+      <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Juan/" aria-label="Saudade — Juan">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Juan/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Juan/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Saudade</span>
@@ -318,10 +176,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Noa/" aria-label="Todos los caminos llevan a Roma pero no al amor — Noa">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Noa/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Noa/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Todos los caminos llevan a Roma pero no al amor</span>
@@ -333,10 +188,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Naia/" aria-label="Hiru garagardo — Naia">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Naia/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Naia/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Hiru garagardo</span>
@@ -347,11 +199,8 @@
         </a>
       </li>
       <li class="poem-item">
-        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Maria/" aria-label="El arte de ser tú — Maria Fernández">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Maria/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Maria/" aria-label="El arte de ser tú — Maria">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Maria/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">El arte de ser tú</span>
@@ -363,10 +212,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Monica/" aria-label="Termin(amo)s — Monica">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Monica/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Monica/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Termin(amo)s</span>
@@ -378,10 +224,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Elena/" aria-label="La verdad de los para siempre — Elena">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Elena/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Elena/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">La verdad de los para siempre</span>
@@ -393,10 +236,7 @@
       </li>
       <li class="poem-item">
         <a class="poem-link" href="https://cdccris.github.io/poemas/play/Paula/" aria-label="Preludio a mi corazón — Paula">
-          <img class="poem-thumb"
-               src="https://cdccris.github.io/poemas/Paula/cover.png" alt=""
-               loading="lazy"
-               onerror="this.style.visibility='hidden'">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Paula/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
           <div class="poem-center">
             <span class="poem-num"></span>
             <span class="poem-name">Preludio a mi corazón</span>
@@ -406,14 +246,36 @@
           <span class="poem-arrow">→</span>
         </a>
       </li>
+      <li class="poem-item">
+        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Unai/" aria-label="Ahora — Unai">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Unai/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div class="poem-center">
+            <span class="poem-num"></span>
+            <span class="poem-name">Ahora</span>
+            <span class="poem-reciter">Unai</span>
+          </div>
+          <span class="poem-dur">—</span>
+          <span class="poem-arrow">→</span>
+        </a>
+      </li>
+      <li class="poem-item">
+        <a class="poem-link" href="https://cdccris.github.io/poemas/play/Ariñe/" aria-label="Rompecabezas — Ariñe">
+          <img class="poem-thumb" src="https://cdccris.github.io/poemas/Ariñe/cover.png" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+          <div class="poem-center">
+            <span class="poem-num"></span>
+            <span class="poem-name">Rompecabezas</span>
+            <span class="poem-reciter">Ariñe</span>
+          </div>
+          <span class="poem-dur">—</span>
+          <span class="poem-arrow">→</span>
+        </a>
+      </li>
     </ol>
   </section>
-
   <footer class="colophon">
     <div class="colophon-line"></div>
-    <p class="colophon-text">Poemas</p>
+    <p class="colophon-text">Poemas · sus amigos, en su voz</p>
   </footer>
-
   <script>
     const items = document.querySelectorAll('.poem-item');
     const obs = new IntersectionObserver(entries => {
@@ -424,11 +286,8 @@
           obs.unobserve(e.target);
         }
       });
-    }, { threshold: 0.05, rootMargin: '0px 0px -30px 0px' });
+    }, {threshold:0.05, rootMargin:'0px 0px -30px 0px'});
     items.forEach(it => obs.observe(it));
-
-    // Durations
-    const BASE = 'https://cdccris.github.io/poemas';
     document.querySelectorAll('.poem-link').forEach(link => {
       const key = link.href.split('/play/')[1]?.replace('/','');
       const el  = link.querySelector('.poem-dur');
@@ -441,7 +300,7 @@
         el.textContent = Math.floor(s/60)+':'+String(s%60).padStart(2,'0');
         a.src='';
       }, {once:true});
-      a.src = BASE+'/'+key+'/audio.m4a';
+      a.src = 'https://cdccris.github.io/poemas/'+key+'/audio.m4a';
     });
   </script>
 </body>
